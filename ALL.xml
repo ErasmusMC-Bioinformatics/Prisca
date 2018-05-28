@@ -1,0 +1,47 @@
+<tool id="prisca" name="PRISCA" version="1.0">
+	<description>PRecISe Clonal Analysis</description>
+	<command interpreter="bash">
+		wrapper.sh $in_file $out_file $out_file.files_path $min_freq $min_cells $merge_on
+	</command>
+	<inputs>
+		<param name="in_file" format="tabular" type="data" label="Data to Process" />
+		<param name="min_freq" type="text" label="Minimum Frequency, between 0 and 100 in percentage" value='0'/>
+		<param name="min_cells" type="text" label="Minimum cell count" value='0'/>
+		<param name="merge_on" type="select" label="Merge On">
+			<option value="Clone_Sequence">Clone_Sequence</option>
+			<option value="V_J_CDR3">V+J+CDR3</option>
+		</param>
+	</inputs>
+	<outputs>
+		<data format="html" name="out_file" />
+	</outputs>
+	<help>
+Takes a tabular file as input, it needs to following columns:
+
++----------------------------------+----------------------------------------------+
+| **Column name**                  | **Column contents**                          |
++----------------------------------+----------------------------------------------+
+| Patient                          | The patient ID                               |
++----------------------------------+----------------------------------------------+
+| Sample                           | The Sample ID, one, two or three per Patient |
++----------------------------------+----------------------------------------------+
+| Cell_Count                       | The cell count within a sample/loci          |
++----------------------------------+----------------------------------------------+
+| Clone_Molocule_Count_From_Spikes | The count of a clone                         |
++----------------------------------+----------------------------------------------+
+| Log10_Frequency                  | The frequency of a clone in log10            |
++----------------------------------+----------------------------------------------+
+| J_Segment_Major_Gene             | The J Gene of this clone                     |
++----------------------------------+----------------------------------------------+
+| V_Segment_Major_Gene             | The V Gene of this clone                     |
++----------------------------------+----------------------------------------------+
+| Clone_Sequence                   | The entire sequence                          |
++----------------------------------+----------------------------------------------+
+| CDR3_Sense_Sequence              | The CDR3 sequence region.                    |
++----------------------------------+----------------------------------------------+
+
+It will handle patients with one, two or three samples.
+
+And generate a detailed HTML report on the sequences found in indiviual samples and in both samples.
+	</help>
+</tool>

@@ -1,71 +1,44 @@
 library(ggplot2)
 library(data.table)
-windowsFonts(Arial=windowsFont("TT Arial"))
+#windowsFonts(Arial=windowsFont("TT Arial"))
+library("extrafont")
+font_import()
+loadfonts()
+
 
 needed_patients = c("5784", "6449", "5257", "6991", "8503", "8478", "10666", "10891", "11255", "11288", "4714", "5117", "5756", "5766", "5864", "6190", "6386", "6417", "6558", "6603", "6874", "6892", "6974", "7170", "8099", "8549", "9974", "12401", "14209", "15582", "9563", "9850", "10151", "10265", "10275", "10944", "11441", "11938", "12210", "14559", "5930", "5456", "5657", "261195", "130890", "30390")
 needed_patients = c("5784", "6449", "5257", "6991", "8503", "8478", "10666", "10891", "11255", "11288", "4714", "5117", "5756", "5766", "5864", "6190", "6386", "6417", "6558", "6603", "6874", "6892", "6974", "7170", "8099", "8549", "9974", "12401", "14209", "15582", "9563", "9850", "10151", "10265", "10275", "11441", "11938", "12210", "14559", "5930", "5456", "5657", "261195", "130890", "30390")
 
-#input_file = "D:/wd/prisca/heatmaps_vincent/2015-11-20-sorted.txt"
-
-#input_file = "D:/wd/prisca/heatmaps_vincent/vs_2015_fltr.txt"
-#input_data1 = read.table(file=input_file, header = T, sep = "\t", quote = "",fill = T, stringsAsFactors = F)
-
-#names(input_data1)[names(input_data1) == "dsPerm"] = "dsPerM"
-
-
-#input_file = "D:/wd/prisca/heatmaps_vincent/VanDongen_clones_evol_may2015_complete_2015_8_20.txt"
-#input_data2 = read.table(file=input_file, header = T, sep = "\t", quote = "",fill = T, stringsAsFactors = F)
-
-#input_data2 = input_data2[,names(input_data1)]
-
-#input_data = rbind(input_data1, input_data2)
-
-#input_data = input_data[grepl(paste("VanDongen_cALL_",needed_patients, sep="", collapse="|"), input_data$Patient),]
-
-
-#write.table(x = input_data, file = "Dx_R_patients_2017.txt", quote = F, append = F, sep = "\t", row.names = F, col.names = T)
-#input_file = "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017.txt"
-#input_data = read.table(file=input_file, header = T, sep = "\t", quote = "",fill = T, stringsAsFactors = F)
-
 input_file = "D:/wd/_oud/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original.txt"
 input_data = read.table(file=input_file, header = T, sep = "\t", quote = "",fill = T, stringsAsFactors = F)
 
-#input_file = "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original_filter.txt"
-#input_data = read.table(file=input_file, header = T, sep = "\t", quote = "",fill = T, stringsAsFactors = F)
+#read_thresholds = c(0,10,25,50,100,250,500,750,1000,10000)
 
-#output_dir = "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original_output"
-#output_dir = "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original_output_only_read_filter"
-#output_dir = "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original_output_freq_read_filter"
-#output_dir = "D:/wd/prisca/heatmaps_vincent/2018-01-22"
+#read_thresholds = c(0,25,100,1000,10000)
+#read_threshold_labels = c("0-25", "25-100", "100-1000", "1000-10000", ">10000")
 
-read_thresholds = c(0,10,25,50,100,250,500,750,1000,10000)
-read_thresholds = c(0,25,100,1000,10000)
-read_threshold_labels = c("0-25", "25-100", "100-1000", "1000-10000", ">10000")
+read_thresholds = c(0,100,1000,10000)
+read_threshold_labels = c("0-100", "101-1000", "1001-10000", ">10000")
+
 freq_thresholds_2 = c(0,0.01,0.05,0.1,0.5,1,5)
+
 freq_thresholds = c(0,0.01,0.1,1,5)
 freq_threshold_labels = c("0-0.01", "0.01-0.1", "0.1-1", "1-5", ">5")
 
+freq_thresholds = c(0, 0.1, 1,5)
+freq_threshold_labels = c("0-0.1", "0.1-1", "1-5", ">5")
+
 rearrangement_types = c("Total", "IGH-Vh-Jh", "IGH-Dh-Jh", "Vk-Jk", "Vk-Kde", "Intron-Kde", "TCRG", "TCRD-Vd-Dd", "TCRD-Dd-Dd", "TCRB-Vb-Jb", "IGK", "TCRD")
-#rearrangement_types = c("Total", "IGH-Vh-Jh", "IGH-Dh-Jh", "IGK", "TCRG", "TCRD", "TCRB-Vb-Jb")
-
-#patient_samples = unique(input_data[,c("Patient", "Sample")])
-
-#patient_samples = patient_samples[order(patient_samples$Patient),]
-
-#for vs_2015_fltr data
-#patients = unique(patient_samples$Patient)
-#input_dir = "ziv_rosen_vanDongen_report_2015/"
-
-#for may2015 data
-#patients = c("VanDongen_cALL_10666", "VanDongen_cALL_10891", "VanDongen_cALL_11255", "VanDongen_cALL_11288", "VanDongen_cALL_12401", "VanDongen_cALL_14209", "VanDongen_cALL_15582", "VanDongen_cALL_4714", "VanDongen_cALL_5117", "VanDongen_cALL_5257", "VanDongen_cALL_5756", "VanDongen_cALL_5766", "VanDongen_cALL_5784", "VanDongen_cALL_5864", "VanDongen_cALL_6190", "VanDongen_cALL_6386", "VanDongen_cALL_6417", "VanDongen_cALL_6449", "VanDongen_cALL_6558", "VanDongen_cALL_6603", "VanDongen_cALL_6874", "VanDongen_cALL_6892", "VanDongen_cALL_6974", "VanDongen_cALL_6991", "VanDongen_cALL_7170", "VanDongen_cALL_8099", "VanDongen_cALL_8478", "VanDongen_cALL_8503", "VanDongen_cALL_8549", "VanDongen_cALL_9974")
-#input_dir = "VanDongen_clones_evol_may2015_complete_2015_8_20/"
-
-#for 40 patients from both
-#input_dir = "may2015_ziv_rosen_combined/"
+rearrangement_types = c("Total", "IGH-Vh-Jh", "IGH-Dh-Jh", "Vk-Jk", "Vk-Kde", "Kde", "Intron-Kde", "TCRG", "TCRD-Vd-Dd", "TCRD-Dd-Dd", "TCRB-Vb-Jb", "IGK", "TCRD")
 
 input_data$Frequency = ((10^input_data$Log10_Frequency)*100)
 
 result_list = list()
+
+#patient.list=unique(patient_samples$Patient)
+#locus.list=c("Vk-Kde", "Intron-Kde")
+#new.locus.name="Kde"
+#work_dir="D:/wd/_oud/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original"
 
 #merge the files of multiple locus into new files for the a combined locus
 merge.locus = function(patient.list, locus.list, new.locus.name, work_dir){ 
@@ -84,6 +57,7 @@ merge.locus = function(patient.list, locus.list, new.locus.name, work_dir){
       sample2 = tmp
     }
     
+    #pick one of these two next lines, just for the first run
     #combined.patient.data = read.table(file = file.path(work_dir, paste(sample1, sample2, "Total", "0.txt", sep="_"), sep=""), header = T, sep = "\t", quote = "", fill = T, stringsAsFactors = F, dec=",")[NULL,]
     #combined.patient.data = read.table(file = file.path(work_dir, paste(sample2, sample1, "Total", "0.txt", sep="_"), sep=""), header = T, sep = "\t", quote = "", fill = T, stringsAsFactors = F, dec=",")[NULL,]
     combined.patient.data = combined.patient.data[NULL,]
@@ -172,6 +146,7 @@ merge.locus = function(patient.list, locus.list, new.locus.name, work_dir){
 
 merge.locus(unique(patient_samples$Patient), c("TCRD-Vd-Dd", "TCRD-Dd-Dd"), "TCRD", "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original")
 merge.locus(unique(patient_samples$Patient), c("Vk-Jk", "Vk-Kde", "Intron-Kde"), "IGK", "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original")
+merge.locus(unique(patient_samples$Patient), c("Vk-Kde", "Intron-Kde"), "Kde", "D:/wd/_oud/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original")
 
 write_fasta = function(id, seq, fasta_file){
   cat(c(paste(">", id, sep=""), seq), sep="\n", append=TRUE, file=fasta_file)
@@ -476,12 +451,12 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
         cut(
           pmax(patient_data[,paste("Normalized_Read_Count", sample1, sep=".")], patient_data[,paste("Normalized_Read_Count", sample2, sep=".")]),
           breaks=c(read_thresholds, Inf), 
-          labels=c("0-25", "25-100", "100-1000", "1000-10000", ">10000") #c("0-10", "10-25", "25-50", "50-100", "100-250", "250-500", "500-750", "750-1000", "1000-10000", ">10000")
+          labels=read_threshold_labels#c("0-25", "25-100", "100-1000", "1000-10000", ">10000") #c("0-10", "10-25", "25-50", "50-100", "100-250", "250-500", "500-750", "750-1000", "1000-10000", ">10000")
         ),
         cut(
           pmax(patient_data[,paste("Frequency", sample1, sep=".")], patient_data[,paste("Frequency", sample2, sep=".")]),
           breaks=c(freq_thresholds, Inf), 
-          labels=c("0-0.01", "0.01-0.1", "0.1-1", "1-5", ">5") #c("0-0.01", "0.01-0.05", "0.05-0.1", "0.1-0.5", "0.5-1", "1-5", ">5")
+          labels=freq_threshold_labels#c("0-0.01", "0.01-0.1", "0.1-1", "1-5", ">5") #c("0-0.01", "0.01-0.05", "0.05-0.1", "0.1-0.5", "0.5-1", "1-5", ">5")
         )
       )
     )
@@ -579,7 +554,7 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
       Reads = "Sum"
     )
     tmp[,cols.sub] = colSums(all.bins.both[all.bins.both$Freq == freq_threshold_label, cols.sub])
-    all.bins.both.tmp = rbind(all.bins.both.tmp, tmp)
+    #all.bins.both.tmp = rbind(all.bins.both.tmp, tmp)
   }
   for(read_threshold_label in read_threshold_labels){
     tmp = data.frame(
@@ -587,13 +562,13 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
       Reads = read_threshold_label
     )
     tmp[,cols.sub] = colSums(all.bins.both[all.bins.both$Reads == read_threshold_label, cols.sub])
-    all.bins.both.tmp = rbind(all.bins.both.tmp, tmp)
+    #all.bins.both.tmp = rbind(all.bins.both.tmp, tmp)
   }
   
   sum.sum = data.frame(t(colSums(all.bins.both.tmp[all.bins.both.tmp$Reads == "Sum", cols.sub])))
   sum.sum$Reads = "Sum"
   sum.sum$Freq = "Sum"
-  all.bins.both.tmp = rbind(all.bins.both.tmp, sum.sum)
+  #all.bins.both.tmp = rbind(all.bins.both.tmp, sum.sum)
   
   all.bins.both = all.bins.both.tmp
   
@@ -607,12 +582,12 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
   all.bins.both[is.nan(all.bins.both$perc.in.both.mean), "heatmap.text.mean"] = ""
   
   #ordering of axis
-  all.bins.both$Reads = factor(x = all.bins.both$Reads, levels = c("0-25", "25-100", "100-1000", "1000-10000", ">10000", "Sum"), ordered = T)
-  all.bins.both$Freq = factor(x = all.bins.both$Freq, levels = c("0-0.01", "0.01-0.1", "0.1-1", "1-5", ">5", "Sum"), ordered = T)
+  all.bins.both$Reads = factor(x = all.bins.both$Reads, levels = read_threshold_labels, ordered = T)
+  all.bins.both$Freq = factor(x = all.bins.both$Freq, levels = freq_threshold_labels, ordered = T)
   
   print(ggplot(all.bins.both, aes(Reads, Freq)) + 
           geom_tile(aes(fill=perc.in.both.sum), colour = NA) + 
-          geom_text(aes(label=heatmap.text.sum), size=6) +
+          geom_text(aes(label=heatmap.text.sum), size=11) +
           scale_fill_gradient(low = "white",high = "steelblue", na.value="transparent", limits=c(0,100),name="Percentage\nIn Both") +
           theme(
             text=element_text(size=30, family="Arial"),
@@ -629,7 +604,7 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
   
   print(ggplot(all.bins.both, aes(Reads, Freq)) + 
           geom_tile(aes(fill=perc.in.both.mean), colour = NA) + 
-          geom_text(aes(label=heatmap.text.mean), size=6) +
+          geom_text(aes(label=heatmap.text.mean), size=11) +
           scale_fill_gradient(low = "white",high = "steelblue", na.value="transparent", limits=c(0,100),name="Percentage\nIn Both") +
           theme(
             text=element_text(size=30, family="Arial"),
@@ -673,7 +648,7 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
       tmp$Diagnose = sum(read.vs.freq.count[read.vs.freq.count$Frequency == freq_threshold_label,"Diagnose"])
       tmp$Recidief = sum(read.vs.freq.count[read.vs.freq.count$Frequency == freq_threshold_label,"Recidief"])
       tmp$perc.diag = NA
-      read.vs.freq.count = rbind(read.vs.freq.count, tmp)
+      #read.vs.freq.count = rbind(read.vs.freq.count, tmp)
     }
     for(read_threshold_label in read_threshold_labels){
       tmp = data.frame(
@@ -683,7 +658,7 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
       tmp$Diagnose = sum(read.vs.freq.count[read.vs.freq.count$Reads == read_threshold_label,"Diagnose"])
       tmp$Recidief = sum(read.vs.freq.count[read.vs.freq.count$Reads == read_threshold_label,"Recidief"])
       tmp$perc.diag = NA
-      read.vs.freq.count = rbind(read.vs.freq.count, tmp)
+      #read.vs.freq.count = rbind(read.vs.freq.count, tmp)
     }
     sum.sum = data.frame(
       Reads="Sum", 
@@ -692,14 +667,14 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
       Recidief=sum(read.vs.freq.count[read.vs.freq.count$Frequency == "Sum", "Recidief"]),
       perc.diag=NA
     )
-    read.vs.freq.count = rbind(read.vs.freq.count, sum.sum)
+    #read.vs.freq.count = rbind(read.vs.freq.count, sum.sum)
     
-    read.vs.freq.count$Reads = factor(x = read.vs.freq.count$Reads, levels = c("0-25", "25-100", "100-1000", "1000-10000", ">10000", "Sum"), ordered = T)
-    read.vs.freq.count$Frequency = factor(x = read.vs.freq.count$Frequency, levels = c("0-0.01", "0.01-0.1", "0.1-1", "1-5", ">5", "Sum"), ordered = T)
+    read.vs.freq.count$Reads = factor(x = read.vs.freq.count$Reads, levels = read_threshold_labels, ordered = T)
+    read.vs.freq.count$Frequency = factor(x = read.vs.freq.count$Frequency, levels = freq_threshold_labels, ordered = T)
     
     print(ggplot(read.vs.freq.count, aes(Reads, Frequency)) + 
             geom_tile(aes(fill=perc.diag), colour = NA) + 
-            geom_text(aes(label=Diagnose), size=6) +
+            geom_text(aes(label=Diagnose), size=11) +
             scale_fill_gradient(low = "white",high = "steelblue", na.value="transparent", limits=c(0,100),name="Percentage") +
             theme(
               text=element_text(size=30, family="Arial"),
@@ -735,7 +710,7 @@ post_prisca_patient_analysis = function(patient_ids, input_dir, rearrangement_ty
       if(!is.null(all_sample_data)){
         if(nrow(all_sample_data) > 0){
           all_sample_data$link = (max(all_patient_data_fltr$link) + 1):(max(all_patient_data_fltr$link) + nrow(all_sample_data))
-          all_sample_data = all_sample_data[,c("Normalized_Read_Count", "Frequency", "link", "type")]
+          all_sample_data = all_sample_data[,c("normalized_read_count", "Frequency", "link", "type")]
           names(all_sample_data) = c("Normalized_Read_Count", "Frequency", "link", "type")
           all_patient_data_rbind = rbind(all_patient_data_rbind, all_sample_data)
         }
@@ -790,9 +765,9 @@ windowsFonts(Arial=windowsFont("TT Arial"))
 
 post_prisca_patient_analysis(
   unique(patient_samples$Patient), 
-  "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original", 
+  "D:/wd/_oud/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original", 
   "Total", 
-  "D:/wd/prisca/heatmaps_vincent/tmp",
+  "D:/wd/_oud/prisca/heatmaps_vincent/tmp",
   diag_freq = 0,
   recid_freq = 0
 )
@@ -811,9 +786,9 @@ for(rearrangement_type in rearrangement_types){ #everything
       print(paste("Running", rearrangement_type, diag_freq, recid_freq))
       post_prisca_patient_analysis(
         patient_ids, 
-        "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original", 
+        "D:/wd/_oud/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original", 
         rearrangement_type, 
-        "D:/wd/prisca/heatmaps_vincent/2018-4-10_result",
+        "D:/wd/_oud/prisca/heatmaps_vincent/2018-8-23_result",
         diag_freq = diag_freq,
         recid_freq = recid_freq
       )
@@ -833,6 +808,22 @@ for(rearrangement_type in rearrangement_types){ #just for the relapse
         diag_freq = diag_freq,
         recid_freq = recid_freq,
         only_both = T
+      )
+    }
+  }
+}
+
+for(rearrangement_type in rearrangement_types){ #just for the relapse
+  for(diag_freq in c(0)){
+    for(recid_freq in c(0)){
+      print(paste("Running", rearrangement_type, diag_freq, recid_freq))
+      post_prisca_patient_analysis(
+        unique(patient_samples$Patient), 
+        "D:/wd/prisca/heatmaps_vincent/Dx_R_patients_2017_from_original", 
+        rearrangement_type, 
+        "D:/wd/prisca/heatmaps_vincent/2018-8-21_relapse_result",
+        diag_freq = diag_freq,
+        recid_freq = recid_freq
       )
     }
   }
@@ -1022,7 +1013,7 @@ library(data.table)
 complete_data = NULL #all the sequence frequency/read counts with an extra columns for patient, sample and diag/recid/both
 
 for(rearrangement_type in rearrangement_types){
-  for(patient in patients){
+  for(patient in patient_ids){
     this_patient_samples = patient_samples[patient_samples$Patient == patient,]
     sample1 = as.character(this_patient_samples[1, "Sample"])
     sample2 = as.character(this_patient_samples[2, "Sample"])
@@ -1062,7 +1053,8 @@ for(rearrangement_type in rearrangement_types){
           Frequency_diag=patient_data[,paste("Frequency", sample1, sep=".")],
           Frequency_rec=patient_data[,paste("Frequency", sample2, sep=".")],
           type="both",
-          locus=rearrangement_type
+          locus=rearrangement_type,
+          sequence=patient_data$Clone.Sequence
         )
         
         if(is.null(complete_data)){
@@ -1088,7 +1080,8 @@ for(rearrangement_type in rearrangement_types){
           Frequency_diag=sample1_data$Frequency,
           Frequency_rec=NA,
           type="diag",
-          locus=rearrangement_type
+          locus=rearrangement_type,
+          sequence=sample1_data$Clone.Sequence
         )
         
         if(is.null(complete_data)){
@@ -1114,7 +1107,8 @@ for(rearrangement_type in rearrangement_types){
           Frequency_diag=NA,
           Frequency_rec=sample2_data$Frequency,
           type="recid",
-          locus=rearrangement_type
+          locus=rearrangement_type,
+          sequence=sample2_data$Clone.Sequence
         )
         
         if(is.null(complete_data)){
@@ -1126,11 +1120,81 @@ for(rearrangement_type in rearrangement_types){
     }
   }
 }
-write.table(x = complete_data, file = "D:/wd/prisca/heatmaps_vincent/dx_rec_from_orig_complete_data.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = complete_data, file = "D:/wd/_oud/prisca/heatmaps_vincent/dx_rec_from_orig_complete_data_with_seq.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 complete_data_fltr = complete_data[
   pmax(complete_data$Normalized_Read_count_diag, complete_data$Normalized_Read_count_rec) > 100 &&
   pmax(complete_data$Frequency_diag, complete_data$Frequency_rec, na.rm = T) > 0.01,
 ]
+
+
+
+
+# perform the IGH-Vh-Jh J comparison, see if there are big clones (freq >5) in Dx that are in R (freq >1) but with a different V
+
+complete_data_fltr = complete_data[
+  pmax(complete_data$Frequency_diag, na.rm=T) > 5 |
+  pmax(complete_data$Frequency_rec, na.rm=T) > 1,
+]
+complete_data_fltr = complete_data_fltr[!is.na(complete_data_fltr$patient),]
+complete_data_fltr = complete_data_fltr[complete_data_fltr$locus %in% c("IGH-Vh-Jh", "IGH-Dh-Jh"),]
+
+complete_data_fltr_Dx = complete_data_fltr[complete_data_fltr$type == "diag", c(
+  "patient", 
+  "Proximal.segment", 
+  "Distal.segment", 
+  "Normalized_Read_count_diag",
+  "Frequency_diag",
+  "sequence",
+  "locus"
+)]
+complete_data_fltr_R = complete_data_fltr[complete_data_fltr$type == "recid", c(
+  "patient", 
+  "Proximal.segment", 
+  "Distal.segment", 
+  "Normalized_Read_count_rec",
+  "Frequency_rec",
+  "sequence",
+  "locus"
+)]
+
+names(complete_data_fltr_Dx) = c("patient", "Proximal.segment.Dx", "Distal.segment", "Normalized_Read_count.Dx", "Frequency.Dx", "sequence.Dx", "locus.Dx")
+names(complete_data_fltr_R) = c("patient", "Proximal.segment.R", "Distal.segment", "Normalized_Read_count.R", "Frequency.R", "sequence.R", "locus.R")
+
+complete_data_fltr_merge = merge(
+  complete_data_fltr_Dx,
+  complete_data_fltr_R,
+  by=c("patient", "Distal.segment")
+)
+complete_data_fltr_merge$seq.dist = diag(adist(complete_data_fltr_merge$sequence.Dx, complete_data_fltr_merge$sequence.R))
+
+complete_data_fltr_merge = complete_data_fltr_merge[,c(
+  "patient",
+  "Distal.segment",
+  "Proximal.segment.Dx",
+  "Proximal.segment.R",
+  "locus.Dx",
+  "locus.R",
+  "seq.dist",
+  "Frequency.Dx",
+  "Frequency.R",
+  "Normalized_Read_count.Dx",
+  "Normalized_Read_count.R",
+  "sequence.Dx",
+  "sequence.R"
+)]
+
+complete_data_fltr_merge = complete_data_fltr_merge[order(
+  complete_data_fltr_merge$patient,
+  complete_data_fltr_merge$Distal.segment,
+  complete_data_fltr_merge$seq.dist
+),]
+
+write.table(x = complete_data_fltr_merge, file = "D:/wd/_oud/prisca/heatmaps_vincent/Vh-Dh_analysis.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+
+
+
+
+
 complete_data = read.table(file = "D:/wd/prisca/heatmaps_vincent/dx_rec_from_orig_complete_data.txt", header = T, sep = "\t", quote = "", stringsAsFactors = F)
 
 
